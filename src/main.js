@@ -6,7 +6,7 @@ import router from './router'
 
 import VueFire from 'vuefire';
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 Vue.use(VueFire);
 
 /* eslint-disable no-new */

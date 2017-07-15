@@ -25,54 +25,18 @@
         </form>
       </div>
     </div>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3>Blog Entries</h3>
-      </div>
-      <div class="panel-body">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Titel</th>
-              <th>Author</th>
-              <th>Text</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="blog in blogs">
-              <td>{{ blog.title }}</td>
-              <td>{{ blog.author }}</td>
-              <td>{{ blog.text }}</td>
-              <td><span class="onclick glyphicon glyphicon-trash" v-on:click="removeBlog(blog)"></span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-  import Firebase from 'firebase';
-
-  // Initialize Firebase
-  const config = {
-    apiKey: "AIzaSyDmohfWVSL1716I-VkUVp8hkWB2MePab3M",
-    authDomain: "blogexample-33295.firebaseapp.com",
-    databaseURL: "https://blogexample-33295.firebaseio.com",
-    projectId: "blogexample-33295",
-    storageBucket: "blogexample-33295.appspot.com",
-    messagingSenderId: "849369740716"
-  };
-  const app = Firebase.initializeApp(config);
-  const db = app.database();
-  const blogsRef = db.ref('blog');
+  import database from './util/database';
+  const blogRef = database.ref('blog');
 
   export default {
     name: 'app',
     firebase: {
-        blogs: blogsRef,
+        blogs: blogRef,
     },
     data() {
       return {
@@ -85,16 +49,12 @@
     },
     methods: {
       addBlog: function() {
-        blogsRef.push(this.newBlog);
+        blogRef.push(this.newBlog);
         this.newBlog.author = '';
         this.newBlog.title = '';
         this.newBlog.text = '';
         toastr.success('Blog added!');
       },
-      removeBlog: function(blog) {
-        blogsRef.child(blog['.key']).remove();
-        toastr.error('Blog removed!');
-      }
     }
   }
 </script>
@@ -107,10 +67,4 @@
   color: #2c3e50;
   margin-top: 60px;
 }
-  .onclick {
-    cursor: pointer;
-  }
-  .onclick:hover {
-    color: gray;
-  }
 </style>
